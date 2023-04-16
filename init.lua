@@ -195,6 +195,7 @@ vim.o.hlsearch = false
 
 -- Make line numbers default
 vim.wo.number = true
+vim.o.relativenumber = true
 
 -- Enable mouse mode
 vim.o.mouse = 'a'
@@ -276,11 +277,22 @@ vim.keymap.set('n', '<leader>/', function()
   })
 end, { desc = '[/] Fuzzily search in current buffer' })
 
-vim.keymap.set('n', '<leader>sf', require('telescope.builtin').find_files, { desc = '[S]earch [F]iles' })
+vim.keymap.set('n', '<C-p>', require('telescope.builtin').find_files, { desc = 'Search Files' })
 vim.keymap.set('n', '<leader>sh', require('telescope.builtin').help_tags, { desc = '[S]earch [H]elp' })
 vim.keymap.set('n', '<leader>sw', require('telescope.builtin').grep_string, { desc = '[S]earch current [W]ord' })
-vim.keymap.set('n', '<leader>sg', require('telescope.builtin').live_grep, { desc = '[S]earch by [G]rep' })
+vim.keymap.set('n', '<C-f>', require('telescope.builtin').live_grep, { desc = 'Search by Grep' })
 vim.keymap.set('n', '<leader>sd', require('telescope.builtin').diagnostics, { desc = '[S]earch [D]iagnostics' })
+
+-- copilot related
+-- nmap('i', '<C-j>', "copilot#Accept('')", { expr = true, silent = false, script = true})
+--
+
+vim.keymap.set('n', '<leader>j', '<cmd>:lua require("harpoon.ui").nav_file(1)<cr>', {desc = 'Move to the first file'})
+vim.keymap.set('n', '<leader>k', '<cmd>:lua require("harpoon.ui").nav_file(2)<cr>', {desc = 'Move to the first file'})
+vim.keymap.set('n', '<leader>l', '<cmd>:lua require("harpoon.ui").nav_file(3)<cr>', {desc = 'Move to the first file'})
+vim.keymap.set('n', '<leader>;', '<cmd>:lua require("harpoon.ui").nav_file(4)<cr>', {desc = 'Move to the first file'})
+vim.keymap.set('n', '<c-n>', '<cmd>:lua require("harpoon.ui").toggle_quick_menu()<cr>', { desc = 'Show Harpoon menu'})
+vim.keymap.set('n', '<leader>a', '<cmd>:lua require("harpoon.mark").add_file()<cr>', { desc = 'Add file to Harpoon' })
 
 -- [[ Configure Treesitter ]]
 -- See `:help nvim-treesitter`
@@ -354,6 +366,7 @@ vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = "Go to next diagnos
 vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = "Open floating diagnostic message" })
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = "Open diagnostics list" })
 
+
 -- LSP settings.
 --  This function gets run when an LSP connects to a particular buffer.
 local on_attach = function(_, bufnr)
@@ -393,11 +406,15 @@ local on_attach = function(_, bufnr)
     print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
   end, '[W]orkspace [L]ist Folders')
 
+  nmap(
   -- Create a command `:Format` local to the LSP buffer
   vim.api.nvim_buf_create_user_command(bufnr, 'Format', function(_)
     vim.lsp.buf.format()
   end, { desc = 'Format current buffer with LSP' })
+
+)
 end
+
 
 -- Enable the following language servers
 --  Feel free to add/remove any LSPs that you want here. They will automatically be installed.

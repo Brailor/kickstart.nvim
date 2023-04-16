@@ -2,4 +2,13 @@
 --  I promise not to create any merge conflicts in this directory :)
 --
 -- See the kickstart.nvim README for more information
-return {}
+return {
+	'ThePrimeagen/harpoon'
+}
+
+-- require('lazy').setup({
+  -- NOTE: First, some plugins that don't require any configuration
+
+  -- Git related plugins
+  -- 'tpope/vim-fugitive',
+  -- 'tpope/vim-rhubarb',
