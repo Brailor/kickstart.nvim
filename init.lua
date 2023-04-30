@@ -284,7 +284,10 @@ vim.keymap.set('n', '<C-f>', require('telescope.builtin').live_grep, { desc = 'S
 vim.keymap.set('n', '<leader>sd', require('telescope.builtin').diagnostics, { desc = '[S]earch [D]iagnostics' })
 
 -- copilot related
--- nmap('i', '<C-j>', "copilot#Accept('')", { expr = true, silent = false, script = true})
+vim.keymap.set('i', '<C-j>', "copilot#Accept('')", { expr = true, silent = false, script = true, desc = 'Accept Copilot suggestion'})
+-- vim.keymap.set('i', '<C-]>', "<Plug>(copilot-next)", {  silent = false,  desc = 'Accept Copilot suggestion'})
+-- vim.keymap.set('i', '<C-[>', "<Plug>(copilot-previous)", {  silent = false, desc = 'Accept Copilot suggestion'})
+-- vim.keymap.set('i', '<C-space>', "<Plug>(copilot-dismiss)", { silent = false,  desc = 'Accept Copilot suggestion'})
 --
 
 vim.keymap.set('n', '<leader>j', '<cmd>:lua require("harpoon.ui").nav_file(1)<cr>', {desc = 'Move to the first file'})
@@ -309,6 +312,7 @@ require('nvim-treesitter.configs').setup {
     enable = true,
     keymaps = {
       init_selection = '<c-space>',
+
       node_incremental = '<c-space>',
       scope_incremental = '<c-s>',
       node_decremental = '<M-space>',
@@ -366,7 +370,6 @@ vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = "Go to next diagnos
 vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = "Open floating diagnostic message" })
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = "Open diagnostics list" })
 
-
 -- LSP settings.
 --  This function gets run when an LSP connects to a particular buffer.
 local on_attach = function(_, bufnr)
@@ -421,12 +424,37 @@ end
 --
 --  Add any additional override configuration in the following tables. They will be passed to
 --  the `settings` field of the server config. You must look up that documentation yourself.
+
+local function get_python_path()
+  local active_env_path
+  if vim.env.CONDA_PREFIX then
+    active_env_path = vim.env.CONDA_PREFIX .. "/bin/python"
+  else
+    local handle = io.popen("which python")
+    local result = handle:read("*l")
+    handle:close()
+    active_env_path = result
+  end
+
+  return active_env_path
+end
+
+print(get_python_path())
 local servers = {
   -- clangd = {},
   -- gopls = {},
-  -- pyright = {},
-  -- rust_analyzer = {},
-  -- tsserver = {},
+  pyright = {
+    python = {
+      analysis = {
+        autoSearchPaths = true,
+        useLibraryCodeForTypes = true,
+        diagnosticMode = "workspace",
+      },
+      pythonPath = get_python_path(),
+    },
+  },
+  rust_analyzer = {},
+  tsserver = {},
 
   lua_ls = {
     Lua = {
