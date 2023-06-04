@@ -1,5 +1,4 @@
 --[[
-
 =====================================================================
 ==================== READ THIS BEFORE CONTINUING ====================
 =====================================================================
@@ -112,13 +111,13 @@ require('lazy').setup({
     },
   },
 
-  { -- Theme inspired by Atom
-    'navarasu/onedark.nvim',
-    priority = 1000,
-    config = function()
-      vim.cmd.colorscheme 'onedark'
-    end,
-  },
+  -- { -- Theme inspired by Atom
+  --   'navarasu/onedark.nvim',
+  --   priority = 1000,
+  --   config = function()
+  --     vim.cmd.colorscheme 'onedark'
+  --   end,
+  -- },
 
   { -- Set lualine as statusline
     'nvim-lualine/lualine.nvim',
@@ -126,7 +125,7 @@ require('lazy').setup({
     opts = {
       options = {
         icons_enabled = false,
-        theme = 'onedark',
+        theme = 'onelight',
         component_separators = '|',
         section_separators = '',
       },
@@ -168,6 +167,13 @@ require('lazy').setup({
       'nvim-treesitter/nvim-treesitter-textobjects',
     },
     build = ":TSUpdate",
+  },
+
+  {
+    'nvim-treesitter/nvim-treesitter-context',
+    dependencies = {
+      'nvim-treesitter/nvim-treesitter-textobjects',
+    }
   },
 
   -- NOTE: Next Step on Your Neovim Journey: Add/Configure additional "plugins" for kickstart
@@ -284,7 +290,7 @@ vim.keymap.set('n', '<C-f>', require('telescope.builtin').live_grep, { desc = 'S
 vim.keymap.set('n', '<leader>sd', require('telescope.builtin').diagnostics, { desc = '[S]earch [D]iagnostics' })
 
 -- copilot related
-vim.keymap.set('i', '<C-j>', "copilot#Accept('')", { expr = true, silent = false, script = true, desc = 'Accept Copilot suggestion'})
+-- vim.keymap.set('i', '<C-j>', "copilot#Accept('')", { expr = true, silent = false, script = true, desc = 'Accept Copilot suggestion'})
 -- vim.keymap.set('i', '<C-]>', "<Plug>(copilot-next)", {  silent = false,  desc = 'Accept Copilot suggestion'})
 -- vim.keymap.set('i', '<C-[>', "<Plug>(copilot-previous)", {  silent = false, desc = 'Accept Copilot suggestion'})
 -- vim.keymap.set('i', '<C-space>', "<Plug>(copilot-dismiss)", { silent = false,  desc = 'Accept Copilot suggestion'})
@@ -301,10 +307,10 @@ vim.keymap.set('n', '<leader>a', '<cmd>:lua require("harpoon.mark").add_file()<c
 -- See `:help nvim-treesitter`
 require('nvim-treesitter.configs').setup {
   -- Add languages to be installed here that you want installed for treesitter
-  ensure_installed = { 'c', 'cpp', 'go', 'lua', 'python', 'rust', 'tsx', 'typescript', 'vimdoc', 'vim' },
+  ensure_installed = { 'c', 'cpp', 'go', 'lua', 'python', 'rust', 'tsx', 'typescript', 'javascript', 'vimdoc', 'vim' },
 
   -- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
-  auto_install = false,
+  auto_install = true,
 
   highlight = { enable = true },
   indent = { enable = true, disable = { 'python' } },
@@ -312,7 +318,6 @@ require('nvim-treesitter.configs').setup {
     enable = true,
     keymaps = {
       init_selection = '<c-space>',
-
       node_incremental = '<c-space>',
       scope_incremental = '<c-s>',
       node_decremental = '<M-space>',
@@ -355,10 +360,10 @@ require('nvim-treesitter.configs').setup {
     swap = {
       enable = true,
       swap_next = {
-        ['<leader>a'] = '@parameter.inner',
+        ['<leader>n'] = '@parameter.inner',
       },
       swap_previous = {
-        ['<leader>A'] = '@parameter.inner',
+        ['<leader>N'] = '@parameter.inner',
       },
     },
   },
@@ -442,7 +447,7 @@ end
 print(get_python_path())
 local servers = {
   -- clangd = {},
-  -- gopls = {},
+  gopls = {},
   pyright = {
     python = {
       analysis = {
@@ -533,5 +538,35 @@ cmp.setup {
   },
 }
 
+local dap, dapui = require("dap"),require("dapui")
+dapui.setup()
+dap.listeners.after.event_initialized["dapui_config"] = function()
+  dapui.open()
+end
+dap.listeners.before.event_terminated["dapui_config"]=function()
+  dapui.close()
+end
+dap.listeners.before.event_exited["dapui_config"]=function()
+  dapui.close()
+end
+
+-- Setup nvim-dap-go
+local dap_go = require('dap-go')
+dap_go.setup()
+
+vim.fn.sign_define('DapBreakpoint', { text ='🟥', texthl ='', linehl ='', numhl =''})
+vim.fn.sign_define('DapStopped', { text ='▶️', texthl ='', linehl ='', numhl =''})
+
+vim.keymap.set('n', '<F5>', dap.continue)
+vim.keymap.set('n', '<F8>', function ()
+  dapui.close()
+  dap.close()
+end)
+vim.keymap.set('n', '<F10>', dap.step_over)
+vim.keymap.set('n', '<F11>', dap.step_into)
+vim.keymap.set('n', '<F12>', dap.step_out)
+vim.keymap.set('n', '<leader>b', dap.toggle_breakpoint)
+
+vim.cmd.colorscheme "catppuccin-latte"
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
