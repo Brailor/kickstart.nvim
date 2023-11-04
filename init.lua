@@ -41,6 +41,7 @@ P.S. You can delete this when you're done too. It's your config now :)
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
+
 -- Install package manager
 --    https://github.com/folke/lazy.nvim
 --    `:help lazy.nvim.txt` for more info
@@ -83,7 +84,7 @@ require('lazy').setup({
 
       -- Useful status updates for LSP
       -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
-      { 'j-hui/fidget.nvim', opts = {} },
+      { 'j-hui/fidget.nvim', opts = {}, tag = 'legacy' },
 
       -- Additional lua configuration, makes nvim stuff amazing!
       'folke/neodev.nvim',
@@ -111,13 +112,13 @@ require('lazy').setup({
     },
   },
 
-  -- { -- Theme inspired by Atom
-  --   'navarasu/onedark.nvim',
-  --   priority = 1000,
-  --   config = function()
-  --     vim.cmd.colorscheme 'onedark'
-  --   end,
-  -- },
+  { -- Theme inspired by Atom
+    'navarasu/onedark.nvim',
+    priority = 1000,
+    config = function()
+      vim.cmd.colorscheme 'onedark'
+    end,
+  },
 
   { -- Set lualine as statusline
     'nvim-lualine/lualine.nvim',
@@ -125,7 +126,7 @@ require('lazy').setup({
     opts = {
       options = {
         icons_enabled = false,
-        theme = 'onelight',
+        theme = 'onedark',
         component_separators = '|',
         section_separators = '',
       },
@@ -135,11 +136,8 @@ require('lazy').setup({
   { -- Add indentation guides even on blank lines
     'lukas-reineke/indent-blankline.nvim',
     -- Enable `lukas-reineke/indent-blankline.nvim`
-    -- See `:help indent_blankline.txt`
-    opts = {
-      char = '┊',
-      show_trailing_blankline_indent = false,
-    },
+    main = "ibl",-- See `:help indent_blankline.txt`
+    opts = {},
   },
 
   -- "gc" to comment visual regions/lines
@@ -229,11 +227,14 @@ vim.o.updatetime = 250
 vim.o.timeout = true
 vim.o.timeoutlen = 300
 
+vim.o.spell = true
+
 -- Set completeopt to have a better completion experience
 vim.o.completeopt = 'menuone,noselect'
 
 -- NOTE: You should make sure your terminal supports this
 vim.o.termguicolors = true
+vim.o.scrolloff = 10
 
 -- [[ Basic Keymaps ]]
 
@@ -450,7 +451,7 @@ function setup_java()
 
   -- File types that signify a Java project's root directory. This will be
   -- used by eclipse to determine what constitutes a workspace
-  local root_markers = {'gradlew', 'mvnw', '.git'}
+  -- local root_markers = {'gradlew', 'mvnw', '.git'}
   -- local root_dir = require('jdtls.setup').find_root(root_markers)
 
   -- eclipse.jdt.ls stores project specific data within a folder. If you are working
@@ -547,7 +548,7 @@ function setup_java()
       '-configuration', home .. '/.local/share/nvim/mason/packages/jdtls/config_mac',
 
       -- USE THE WORKSPACE_FOLDER DEFINED ABOVE TO STORE DATA FOR THIS PROJECT
-      -- '-data', WORKSPACE_FOLDER,
+      -- '-data', workspace_folder,
     }
   }
 
@@ -679,6 +680,6 @@ vim.keymap.set('n', '<F11>', dap.step_into)
 vim.keymap.set('n', '<F12>', dap.step_out)
 vim.keymap.set('n', '<leader>b', dap.toggle_breakpoint)
 
-vim.cmd.colorscheme "catppuccin-latte"
+-- vim.cmd.colorscheme "catppuccin-latte"
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
