@@ -1,5 +1,4 @@
 return {
-  'github/copilot.vim',
   { 'ThePrimeagen/harpoon', version = "*", dependencies= { 'nvim-lua/plenary.nvim' } },
   'catppuccin/nvim',
   'mfussenegger/nvim-dap',
@@ -9,5 +8,6 @@ return {
   'guns/vim-sexp',
   'liquidz/vim-iced',
   'hiphish/rainbow-delimiters.nvim',
+  'Olical/conjure'
 }
 

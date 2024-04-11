@@ -290,17 +290,10 @@ vim.keymap.set('n', '<leader>sw', require('telescope.builtin').grep_string, { de
 vim.keymap.set('n', '<C-f>', require('telescope.builtin').live_grep, { desc = 'Search by Grep' })
 vim.keymap.set('n', '<leader>sd', require('telescope.builtin').diagnostics, { desc = '[S]earch [D]iagnostics' })
 
--- copilot related
--- vim.keymap.set('i', '<C-j>', "copilot#Accept('')", { expr = true, silent = false, script = true, desc = 'Accept Copilot suggestion'})
--- vim.keymap.set('i', '<C-]>', "<Plug>(copilot-next)", {  silent = false,  desc = 'Accept Copilot suggestion'})
--- vim.keymap.set('i', '<C-[>', "<Plug>(copilot-previous)", {  silent = false, desc = 'Accept Copilot suggestion'})
--- vim.keymap.set('i', '<C-space>', "<Plug>(copilot-dismiss)", { silent = false,  desc = 'Accept Copilot suggestion'})
---
-
 vim.keymap.set('n', '<leader>j', '<cmd>:lua require("harpoon.ui").nav_file(1)<cr>', {desc = 'Move to the first file'})
-vim.keymap.set('n', '<leader>k', '<cmd>:lua require("harpoon.ui").nav_file(2)<cr>', {desc = 'Move to the first file'})
-vim.keymap.set('n', '<leader>l', '<cmd>:lua require("harpoon.ui").nav_file(3)<cr>', {desc = 'Move to the first file'})
-vim.keymap.set('n', '<leader>;', '<cmd>:lua require("harpoon.ui").nav_file(4)<cr>', {desc = 'Move to the first file'})
+vim.keymap.set('n', '<leader>k', '<cmd>:lua require("harpoon.ui").nav_file(2)<cr>', {desc = 'Move to the second file'})
+vim.keymap.set('n', '<leader>l', '<cmd>:lua require("harpoon.ui").nav_file(3)<cr>', {desc = 'Move to the third file'})
+vim.keymap.set('n', '<leader>;', '<cmd>:lua require("harpoon.ui").nav_file(4)<cr>', {desc = 'Move to the fourth file'})
 vim.keymap.set('n', '<c-n>', '<cmd>:lua require("harpoon.ui").toggle_quick_menu()<cr>', { desc = 'Show Harpoon menu'})
 vim.keymap.set('n', '<leader>a', '<cmd>:lua require("harpoon.mark").add_file()<cr>', { desc = 'Add file to Harpoon' })
 
@@ -511,21 +504,24 @@ function setup_java()
         -- See https://github.com/eclipse/eclipse.jdt.ls/wiki/Running-the-JAVA-LS-server-from-the-command-line#initialize-request
         -- And search for `interface RuntimeOption`
         -- The `name` is NOT arbitrary, but must match one of the elements from `enum ExecutionEnvironment` in the link above
-        configuration = {
+        -- configuration = {
           runtimes = {
             {
               name = "JavaSE-17",
               path = home .. "/.sdkman/candidates/java/17.0.8-amzn"
             },
-          }
-        },
+            {
+              name = "JavaSE-21",
+              path = home .. "/.sdkman/candidates/java/21-amzn"
+            },
+          },
     -- cmd is the command that starts the language server. Whatever is placed
     -- here is what is passed to the command line to execute jdtls.
     -- Note that eclipse.jdt.ls must be started with a Java version of 17 or higher
     -- See: https://github.com/eclipse/eclipse.jdt.ls#running-from-the-command-line
     -- for the full list of options
     cmd = {
-      home .. "/.sdkman/candidates/java/17.0.8-amzn/bin/java",
+      home .. "/.sdkman/candidates/java/21-amzn/bin/java", --"/.sdkman/candidates/java/17.0.8-amzn/bin/java",
       '-Declipse.application=org.eclipse.jdt.ls.core.id1',
       '-Dosgi.bundles.defaultStartLevel=4',
       '-Declipse.product=org.eclipse.jdt.ls.core.product',
