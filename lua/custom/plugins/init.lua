@@ -7,6 +7,9 @@ return {
   'sbdchd/neoformat',
   'Olical/conjure',
   'guns/vim-sexp',
+  'HiPhish/rainbow-delimiters.nvim',
+  'theHamsta/nvim-dap-virtual-text',
+  'mbbill/undotree',
   'mfussenegger/nvim-dap',
   {
     "jay-babu/mason-nvim-dap.nvim",

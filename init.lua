@@ -243,6 +243,8 @@ require('lazy').setup({
 
 -- Set highlight on search
 vim.o.hlsearch = false
+-- Override the auto region detection
+vim.cmd("language en_US")
 
 -- Make line numbers default
 vim.wo.number = true
@@ -604,6 +606,11 @@ dap.configurations.java = {
     port = 8001,
   },
 }
+<<<<<<< HEAD
+=======
+
+require("nvim-dap-virtual-text").setup()
+>>>>>>> f8124f1 (add DAP, DAP keybindings and java dap config)
 -- vim.cmd.colorscheme "catppuccin-latte"
 -- vim.cmd.colorscheme "catppuccin"
 
