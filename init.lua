@@ -62,12 +62,6 @@ vim.opt.rtp:prepend(lazypath)
 --  You can configure plugins using the `config` key.
 --
 local servers = {
-  -- clangd = {},
-  -- gopls = {},
-  -- groovyls = {
-  --   filetypes: { "groovy",
-  --
-  -- },
   dockerls = {
     filetypes = { "dockerfile", "containerfile" },
     single_file_support = false,
@@ -78,8 +72,8 @@ local servers = {
     Lua = {
       workspace = { checkThirdParty = false },
       telemetry = { enable = false },
-    },
-  },
+    }
+  }
 }
 
 --  You can also configure plugins after the setup call,
@@ -101,6 +95,7 @@ require('lazy').setup({
       -- set configuration options  as described below
     },
   },
+  "AstroNvim/astrolsp",
   -- NOTE: This is where your plugins related to LSP can be installed.
   --  The configuration is done below. Search for lspconfig to find it below.
   {
@@ -282,9 +277,9 @@ vim.o.timeout = true
 vim.o.timeoutlen = 300
 
 -- Show vertical bar at 120 length
-vim.go.colorcolumn = 120
+-- vim.go.colorcolumn = 120
 
-vim.go.linebreak = 120
+-- vim.go.linebreak = 120
 
 -- Set completeopt to have a better completion experience
 vim.o.completeopt = 'menuone,noselect'
@@ -429,6 +424,34 @@ vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = "Go to next diagnos
 vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = "Open floating diagnostic message" })
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = "Open diagnostics list" })
 
+-- DAP keymaps
+local dap = require('dap')
+vim.keymap.set('n', '<F5>', function() require('dap').continue() end, { desc = "[DAP] Starts the DAP server" })
+vim.keymap.set('n', '<F10>', function() require('dap').step_over() end, { desc = "[DAP] Step over" })
+vim.keymap.set('n', '<F11>', function() require('dap').step_into() end, { desc = "[DAP] Step into" })
+vim.keymap.set('n', '<F12>', function() require('dap').step_out() end, { desc = "[DAP] Step out" })
+vim.keymap.set('n', '<Leader>b', function() require('dap').toggle_breakpoint() end, { desc = "[DAP] Toggle breakpoint" })
+vim.keymap.set('n', '<Leader>B', function() require('dap').set_breakpoint() end, { desc = "[DAP] Set breakpoint" })
+vim.keymap.set('n', '<Leader>lp',
+  function() require('dap').set_breakpoint(nil, nil, vim.fn.input('Log point message: ')) end,
+  { desc = "[DAP] Set log point message" })
+vim.keymap.set('n', '<Leader>dr', function() require('dap').repl.open() end, { desc = "[DAP] Open REPL" })
+vim.keymap.set('n', '<Leader>dl', function() require('dap').run_last() end, { desc = "[DAP] Run last" })
+vim.keymap.set({ 'n', 'v' }, '<Leader>dh', function()
+  require('dap.ui.widgets').hover()
+end, { desc = "[DAP] Hover context UI" })
+vim.keymap.set({ 'n', 'v' }, '<Leader>dp', function()
+  require('dap.ui.widgets').preview()
+end, { desc = "[DAP] Preview context UI" })
+vim.keymap.set('n', '<Leader>df', function()
+  local widgets = require('dap.ui.widgets')
+  widgets.centered_float(widgets.frames)
+end, { desc = "[DAP] Centered float frames UI" })
+vim.keymap.set('n', '<Leader>ds', function()
+  local widgets = require('dap.ui.widgets')
+  widgets.centered_float(widgets.scopes)
+end, { desc = "[DAP] Centered fload widgets UI" })
+
 
 -- LSP settings.
 --  This function gets run when an LSP connects to a particular buffer.
@@ -503,7 +526,7 @@ capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
 local mason_lspconfig = require 'mason-lspconfig'
 
 mason_lspconfig.setup {
-  ensure_installed = vim.tbl_keys(require("astrocore").list_insert_unique(vim.tbl_keys(servers), { "jdtls", "lemminx" }))
+  ensure_installed = require("astrocore").list_insert_unique(vim.tbl_keys(servers), { "jdtls", "lemminx" })
 }
 
 mason_lspconfig.setup_handlers {
@@ -571,6 +594,16 @@ cmp.setup {
   },
 }
 
+dap.configurations.java = {
+  {
+    type = 'java',
+    request = 'attach',
+    name = "Debug (Attach) - Remote For the Connectall UI component",
+    hostName = "localhost",
+    -- TODO: make the port configurable runtime since different components use different ports
+    port = 8001,
+  },
+}
 -- vim.cmd.colorscheme "catppuccin-latte"
 -- vim.cmd.colorscheme "catppuccin"
 

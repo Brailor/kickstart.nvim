@@ -7,6 +7,7 @@ return {
   'sbdchd/neoformat',
   'Olical/conjure',
   'guns/vim-sexp',
+  'mfussenegger/nvim-dap',
   {
     "jay-babu/mason-nvim-dap.nvim",
     optional = true,
