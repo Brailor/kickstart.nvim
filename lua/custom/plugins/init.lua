@@ -8,6 +8,9 @@ return {
   'guns/vim-sexp',
   'liquidz/vim-iced',
   'hiphish/rainbow-delimiters.nvim',
-  'Olical/conjure'
+'tpope/vim-dispatch',
+  'radenling/vim-dispatch-neovim',
+  'clojure-vim/vim-jack-in',
+  'Olical/conjure',
 }
 
