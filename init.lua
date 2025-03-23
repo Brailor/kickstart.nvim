@@ -111,22 +111,13 @@ require('lazy').setup({
       },
     },
   },
-
-  { -- Theme inspired by Atom
-    'navarasu/onedark.nvim',
-    priority = 1000,
-    config = function()
-      vim.cmd.colorscheme 'onedark'
-    end,
-  },
-
   { -- Set lualine as statusline
     'nvim-lualine/lualine.nvim',
     -- See `:help lualine.txt`
     opts = {
       options = {
         icons_enabled = false,
-        theme = 'onedark',
+        theme = 'auto',
         component_separators = '|',
         section_separators = '',
       },
@@ -158,7 +149,6 @@ require('lazy').setup({
       return vim.fn.executable 'make' == 1
     end,
   },
-
   { -- Highlight, edit, and navigate code
     'nvim-treesitter/nvim-treesitter',
     dependencies = {
@@ -166,7 +156,6 @@ require('lazy').setup({
     },
     build = ":TSUpdate",
   },
-
   {
     'nvim-treesitter/nvim-treesitter-context',
     dependencies = {
@@ -383,7 +372,7 @@ local on_attach = function(_, bufnr)
       desc = 'LSP: ' .. desc
     end
 
-    vim.keymap.set('n', keys, func, { buffer = bufnr, desc = desc })
+    -- vim.keymap.set('n', keys, func, { buffer = bufnr, desc = desc })
   end
 
   nmap('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
@@ -568,7 +557,7 @@ local servers = {
     },
   },
   rust_analyzer = {},
-  tsserver = {},
+  -- tsserver = {},
 
   lua_ls = {
     Lua = {
@@ -676,6 +665,13 @@ vim.keymap.set('n', '<F11>', dap.step_into)
 vim.keymap.set('n', '<F12>', dap.step_out)
 vim.keymap.set('n', '<leader>b', dap.toggle_breakpoint)
 
--- vim.cmd.colorscheme "catppuccin-latte"
--- The line beneath this is called `modeline`. See `:help modeline`
--- vim: ts=2 sts=2 sw=2 et
+require("catppuccin").setup({
+    flavour = "latte", -- latte, frappe, macchiato, mocha
+    background = { -- :h background
+        light = "latte",
+        dark = "mocha",
+    },
+    show_end_of_buffer = true, -- shows the '~' characters after the end of buffers
+})
+
+vim.cmd.colorscheme "catppuccin"
